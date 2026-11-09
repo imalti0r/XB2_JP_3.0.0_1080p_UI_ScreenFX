@@ -14,14 +14,18 @@ The base-game patch targets version 3.0.0 of the Japanese/Chinese edition of Xen
 
 | Folder | For | What it does |
 | --- | --- | --- |
+| `XB2_JP_3.0.0_1080p_UI_ScreenFX` | Ryujinx / yuzu / Atmosphere, JP/CN 3.0.0 | 1080p scene (1920×1080) + UIBounds + ScreenFX — the upstream patch |
+| `XB2_JP_3.0.0_1440p_UI_ScreenFX` | Ryujinx / yuzu / Atmosphere, JP/CN 3.0.0 | 1440p scene (2560×1440) + UIBounds + ScreenFX |
 | `XB2_JP_3.0.0_4K_UI_ScreenFX` | Ryujinx / yuzu / Atmosphere, JP/CN 3.0.0 | 4K scene (3840×2160) + UIBounds + ScreenFX |
 | `xc2-recomp_UI_ScreenFX_fix` | [xc2-recomp](https://github.com/AksharDP/xc2-recomp) | UIBounds + ScreenFX only, one file each for JP 3.0.0 and western 3.0.1 |
 
-### Patch contents (4K emulator mod)
+Install only **one** resolution variant: all three patch the same two scene-init instructions.
+
+### Patch contents (emulator mods)
 
 | Component | What it changes |
 | --- | --- |
-| **4K Scene** | The same two instructions the 1080p mod rewrites, re-encoded from `MOVZ W21, #1920` / `MOVZ W22, #1080` to `MOVZ W21, #3840` / `MOVZ W22, #2160` (`15E08152` / `160E8152` little-endian) at main+0x700640/0x700644. |
+| **Scene** | Two instructions at main+0x700640/0x700644, re-encoded per variant: 1920×1080 `15F08052`/`16878052`, 2560×1440 `15408152`/`16B48052`, 3840×2160 `15E08152`/`160E8152` (little-endian). |
 | **UIBounds** | Unchanged from upstream: four instructions so UI bounds use the engine's logical width and height (fixes the selected Blade portrait position and border). Resolution-independent. |
 | **ScreenFX** | Unchanged from upstream: four instructions that project the affected screen-space particles in their original 1280×720 coordinate system, so effects meant to cover the screen have no visible edges. The effects still draw at the render target's actual resolution. This is the fix for the cutscene boxes. |
 
@@ -48,13 +52,12 @@ Both files in this variant carry only UIBounds + ScreenFX:
 - Build ID `FEEE7AFA8A1541BD67AED1A0061FBB57`
 
 1. Stop the game. Download this repository with **Code → Download ZIP**.
-2. In Ryujinx, right-click the game and open its mod directory. Copy the `XB2_JP_3.0.0_4K_UI_ScreenFX` subfolder into
-   that directory (yuzu: load mod folder for the title; Atmosphere: `atmosphere/contents/...` on the SD card).
+2. In Ryujinx, right-click the game and open its mod directory. Copy **one** of the `XB2_JP_3.0.0_{1080p,1440p,4K}_UI_ScreenFX` subfolders into that directory (yuzu: load mod folder for the title; Atmosphere: `atmosphere/contents/...` on the SD card).
 3. Enable the mod and restart the game. The log should show `Matching IPSwitch patch` with the patch filename.
 
 ```
 <Game mod directory>/
-└── XB2_JP_3.0.0_4K_UI_ScreenFX/
+└── XB2_JP_3.0.0_4K_UI_ScreenFX/          (or the 1080p / 1440p folder)
     └── exefs/
         └── XC2_JP_3.0.0_4K_UI_ScreenFX.pchtxt
 ```
@@ -78,7 +81,7 @@ mods/
 
 ## Notes and testing
 
-- The 4K scene change was verified by ARM64 round-trip decode/encode of all four instruction words; the UIBounds and
+- The scene re-encodings for all three variants were verified by ARM64 round-trip decode/encode; the UIBounds and
   ScreenFX bytes are untouched from the upstream 1080p mod, which its author validated offline at 720p, 1080p, 1440p
   and 4K (16:9), plus 1600×900 for ScreenFX.
 - 4K in the *emulator* path means the render target initialization constant; whether the target GPU keeps 60 fps at
