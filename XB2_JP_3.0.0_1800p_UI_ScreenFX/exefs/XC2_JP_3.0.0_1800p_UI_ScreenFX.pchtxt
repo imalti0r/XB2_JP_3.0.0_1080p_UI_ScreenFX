@@ -1,0 +1,21 @@
+@nsobid-FEEE7AFA8A1541BD67AED1A0061FBB57
+@flag offset_shift 0x100
+@flag print_values
+// JP/Chinese XC2 3.0.0: 1800p (3200x1800) Scene + UIBounds + ScreenFX.
+// Install only ONE resolution variant (see README): all variants patch the
+// same two scene-init instructions.
+@enabled
+// 1800p Scene: 3200x1800 render-target initialization.
+00700640 15908152
+00700644 16E18052
+// UIBounds: logical UI dimensions for layout boundary calculations.
+00832DFC 015145BD
+00832E10 015545BD
+00832E24 015145BD
+00832E38 015545BD
+// ScreenFX: logical 1280x720 screen-space particle projection.
+00862AC0 08A08052
+00862AC4 0001231E
+00862AD8 085A8052
+00862AE0 0201231E
+@stop
