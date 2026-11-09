@@ -1,0 +1,18 @@
+@nsobid-4F5C96E2D97F45AC288BC67613EBEF0A
+@flag offset_shift 0x100
+@flag print_values
+// Americas/Europe XC2 3.0.1, for xc2-recomp. UIBounds + ScreenFX only.
+// JP 3.0.0 and western 3.0.1 share byte-identical .text at the same offsets
+// (tools/xc2_titles.py in xc2-recomp), so only the build id differs here.
+@enabled
+// UIBounds: logical UI dimensions for layout boundary calculations.
+00832DFC 015145BD
+00832E10 015545BD
+00832E24 015145BD
+00832E38 015545BD
+// ScreenFX: logical 1280x720 screen-space particle projection.
+00862AC0 08A08052
+00862AC4 0001231E
+00862AD8 085A8052
+00862AE0 0201231E
+@stop

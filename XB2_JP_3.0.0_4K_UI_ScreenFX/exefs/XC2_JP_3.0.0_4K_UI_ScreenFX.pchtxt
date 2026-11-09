@@ -1,14 +1,14 @@
 @nsobid-FEEE7AFA8A1541BD67AED1A0061FBB57
 @flag offset_shift 0x100
 @flag print_values
-// JP/Chinese XC2 3.0.0: 1080p Scene + UIBounds + ScreenFX.
+// JP/Chinese XC2 3.0.0: 4K Scene + UIBounds + ScreenFX.
 // Original effective addresses and replacement bytes preserved.
 // Disable standalone 1080p, UIBounds, ScreenFX and UI/ScreenFX combined mods.
 // No RomFS/INI, SS200, LOD, Composition4K or memory-pool changes included.
 @enabled
-// 1080p Scene: 1920x1080 render-target initialization.
-00700640 15F08052
-00700644 16878052
+// 4K Scene: 3840x2160 render-target initialization (from 1920x1080).
+00700640 15E08152
+00700644 160E8152
 // UIBounds: logical UI dimensions for layout boundary calculations.
 00832DFC 015145BD
 00832E10 015545BD
